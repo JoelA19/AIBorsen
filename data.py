@@ -42,7 +42,6 @@ for i in range(len(movement) - window_size + 1):
 
 
 
-
 #
 
 fig, axs = plt.subplots(3)
