@@ -5,15 +5,22 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-yf.pdr_override() # <== that's all it takes :-)
+yf.pdr_override()  # <== that's all it takes :-)
 
 # download dataframe
 
 data = pdr.get_data_yahoo("INDU-C.st", start="2021-03-24", end="2022-03-24")
 
-movement = data.loc[:,"Close"] / data.loc[:,"Open"]
-AM = movement.rolling(20).mean()
-SMA = data.loc[:,"Close"].rolling(20).mean()
+closes = data.loc[:, "Close"].values.tolist()
+
+movement = []
+
+i = 1
+while i < len(closes):
+    movement.append(closes[i]/closes[i-1])
+    i += 1
+
+SMA = data.loc[:, "Close"].rolling(20).mean()
 
 avgGain = 0
 avgLoss = 0
@@ -21,36 +28,40 @@ avgLoss = 0
 window_size = 14
 window = []
 RSI = []
+avgGainList = []
+avgLossList = []
+smoothRSI = []
+
 for i in range(len(movement) - window_size + 1):
-    window = movement[i: i + window_size]
-    for mov in window:
-        if mov > 1:
-            avgGain += mov-1
-        elif mov <= 1:
-            avgLoss -= mov-1
-    avgGain = avgGain / window_size
-    avgLoss = avgLoss / window_size
-    RSI.append(100 - (100 / (1 + (avgGain/avgLoss))))
+    if i >= window_size:
+        window = movement[i - window_size: i]
+        for mov in window:
+            if mov > 1:
+                avgGain += mov-1
+            elif mov <= 1:
+                avgLoss -= mov-1
+        avgGain = avgGain / window_size
+        avgLoss = avgLoss / window_size
+        avgGainList.append(avgGain)
+        avgLossList.append(avgLoss)
+        RSI.append(100 - (100 / (1 + (avgGain/avgLoss))))
 
 
-
-        
-
-    
+# for i in range(len(RSI) - window_size + 1):
+#     window = RSI[i + 1: i + window_size]
+#     smoothRSI.append(
+#         100 - (100 / (1 + ((avgGainList[i-1]*13+avgGainList[i])/(avgLossList[i-1]*13+avgLossList[i])))))
 # avgGain = avgGain/14
 # avgLoss = avgGain/14
 
 
-
-#
-
 fig, axs = plt.subplots(3)
 fig.suptitle('Vertically stacked subplots')
-axs[0].plot(data.loc[:,"Close"], color="r", label="Close")
+axs[0].plot(data.loc[:, "Close"], color="r", label="Close")
 axs[0].plot(SMA, color="b", label="SMA")
-axs[1].plot(AM, label="Average volatility")
+axs[1].plot(movement, label="Average volatility", color="r")
 axs[2].plot(RSI, label="RSI 14")
-
+axs[2].plot(smoothRSI, label="Smooth RSI 14", color="r")
 
 
 # plt.plot(data.loc[:,"Close"])
@@ -61,8 +72,6 @@ plt.show()
 # ts = ts.cumsum()
 
 # ts.plot()
-
-
 
 
 """"
@@ -128,4 +137,3 @@ msft.news
 # opt = msft.option_chain('YYYY-MM-DD')
 # data available via: opt.calls, opt.puts
 """
-
