@@ -70,7 +70,7 @@ def rsiCal(movement):
 def showRSI():
     for stock in stocks:
         plt.plot(stocks[stock])
-        plt.savefig(stock+".png")
+        plt.savefig("pictures/"+stock+".png")
         plt.clf()
 
 
