@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import requests
 
 # replace the "demo" apikey below with your own key from https://www.alphavantage.co/support/#api-key
-url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=60min&apikey=2TIBEM3EFNEF8ZW3'
+url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=2TIBEM3EFNEF8ZW3&outputsize=full'
 r = requests.get(url)
 data = r.json()
 
@@ -15,27 +15,30 @@ data = r.json()
 
 # data = pd.DataFrame(data)
     
-newData = pd.DataFrame(data["Time Series (60min)"])
+newData = pd.DataFrame(data["Time Series (5min)"])
+
+# print(newData)
+
 # print(newData)
 # graphData = {}
 # for k in newData:
-#     graphData[k] = newData[k]["1. open"]
+    # graphData[k] = newData[k]["1. open"]
 
 # .loc[:,"1. open"]
 
-newData = newData.loc["1. open"]
+newData = newData.loc["4. close"]
 
-# print(newData)
+# # print(newData)
 
-# temp_cols=newData.columns.tolist()
-# new_cols=temp_cols[-1:] + temp_cols[:-1]
+# # temp_cols=newData.columns.tolist()
+# # new_cols=temp_cols[-1:] + temp_cols[:-1]
 x=newData
 
-# my_dict2 = {y:x for x,y in x.items()}
+# # my_dict2 = {y:x for x,y in x.items()}
 
 
-print(x.index)
-print(x[0].index)
+# print(x.index)
+# print(x[0].index)
 
 x = x.iloc[::-1]
 

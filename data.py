@@ -1,3 +1,4 @@
+from lib2to3.pgen2 import grammar
 from msilib import sequence
 import yfinance as yf
 from pandas_datareader import data as pdr
@@ -46,6 +47,14 @@ for i in range(len(movement) - window_size + 1):
         avgLossList.append(avgLoss)
         RSI.append(100 - (100 / (1 + (avgGain/avgLoss))))
 
+if RSI[-1] > 70:
+    ## send discord notif
+    print("time to sell!")
+if RSI[-1] < 30:
+    ## send discord notif
+    print("Time to buy!")
+    print(RSI[-1])
+
 
 # for i in range(len(RSI) - window_size + 1):
 #     window = RSI[i + 1: i + window_size]
@@ -54,9 +63,9 @@ for i in range(len(movement) - window_size + 1):
 # avgGain = avgGain/14
 # avgLoss = avgGain/14
 
-
+print(SMA)
 fig, axs = plt.subplots(3)
-fig.suptitle('Vertically stacked subplots')
+fig.suptitle('INDU-C')
 axs[0].plot(data.loc[:, "Close"], color="r", label="Close")
 axs[0].plot(SMA, color="b", label="SMA")
 axs[1].plot(movement, label="Average volatility", color="r")
