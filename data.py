@@ -51,27 +51,6 @@ def rsiCal(movement):
 
     for mov in movement:
         window = movement[i - window_size: i]
-<<<<<<< Updated upstream
-        for mov in window:
-            if mov > 1:
-                avgGain += mov-1
-            elif mov <= 1:
-                avgLoss -= mov-1
-        avgGain = avgGain / window_size
-        avgLoss = avgLoss / window_size
-        avgGainList.append(avgGain)
-        avgLossList.append(avgLoss)
-        RSI.append(100 - (100 / (1 + (avgGain/avgLoss))))
-
-if RSI[-1] > 70:
-    ## send discord notif
-    print("time to sell!")
-if RSI[-1] < 30:
-    ## send discord notif
-    print("Time to buy!")
-    print(RSI[-1])
-
-=======
         if i >= window_size:
             for mov in window:
                 if mov > 1:
@@ -99,34 +78,9 @@ def showRSI():
 
 
 main()
->>>>>>> Stashed changes
 
 
-<<<<<<< Updated upstream
-print(SMA)
-fig, axs = plt.subplots(3)
-fig.suptitle('INDU-C')
-axs[0].plot(data.loc[:, "Close"], color="r", label="Close")
-axs[0].plot(SMA, color="b", label="SMA")
-axs[1].plot(movement, label="Average volatility", color="r")
-axs[2].plot(RSI, label="RSI 14")
-axs[2].plot(smoothRSI, label="Smooth RSI 14", color="r")
-
-
-# plt.plot(data.loc[:,"Close"])
-plt.show()
-
-# ts = pd.Series(data.loc[:,"Close"], index=pd.date_range("1/1/2017", periods=1000))
-
-# ts = ts.cumsum()
-
-# ts.plot()
-
-
-""""
-=======
 """
->>>>>>> Stashed changes
 msft = yf.Ticker("MSFT")
 
 # get stock info
