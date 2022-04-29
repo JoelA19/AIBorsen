@@ -1,0 +1,1 @@
+stocks = ["MIPS.st","EQT.st","STOR-B.st","ANOD-B.st","ALIF-B.st","THULE.st","HEXA-B.st","LAGR-B.st","INDT.st","EMBRAC-B.st","SBB-B.st","ADDT-B.st","AAK.st","BEIJ-B.st","POOL","LIFCO-B.st","APG","INSTAL.st","XPEL","FNOX.st"]
