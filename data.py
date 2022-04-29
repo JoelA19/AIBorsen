@@ -1,6 +1,5 @@
 from lib2to3.pgen2 import grammar
 from msilib import sequence
-from pytz import UTC
 import yfinance as yf
 from pandas_datareader import data as pdr
 import pandas as pd
@@ -18,6 +17,7 @@ def main():
     date = getDate()
     getClose(date)
     showRSI()
+    alert()
 
 
 def getDate():
@@ -68,13 +68,18 @@ def rsiCal(movement):
 
 
 def showRSI():
-    i = 0
-    fig, axs = plt.subplots(19)
-    fig.suptitle('Vertically stacked subplots')
     for stock in stocks:
-        axs[i].plot(stocks[stock])
-        i += 1
-    plt.show()
+        plt.plot(stocks[stock])
+        plt.savefig(stock+".png")
+        plt.clf()
+
+
+def alert():
+    for stock in stocks:
+        if stocks[stock][-1] > 70:
+            print('Sell ' + stock + ', RSI:', int(stocks[stock][-1]))
+        if stocks[stock][-1] < 30:
+            print('Buy ' + stock + ', RSI:', int(stocks[stock][-1]))
 
 
 main()
