@@ -1,41 +1,57 @@
 from lib2to3.pgen2 import grammar
 from msilib import sequence
+from pytz import UTC
 import yfinance as yf
 from pandas_datareader import data as pdr
 import pandas as pd
 import matplotlib.pyplot as plt
+from datetime import datetime
 
-
-yf.pdr_override()  # <== that's all it takes :-)
+yf.pdr_override()
 
 # download dataframe
+stocks = {"MIPS.st": [], "EQT.st": [], "STOR-B.st": [], "ANOD-B.st": [], "ALIF-B.st": [], "THULE.st": [], "HEXA-B.st": [], "LAGR-B.st": [], "INDT.st": [],
+          "EMBRAC-B.st": [], "SBB-B.st": [], "ADDT-B.st": [], "AAK.st": [], "BEIJ-B.st": [], "POOL": [], "LIFCO-B.st": [], "APG": [], "INSTAL.st": [], "XPEL": []}
 
-data = pdr.get_data_yahoo("INDU-C.st", start="2021-03-24", end="2022-03-24")
 
-closes = data.loc[:, "Close"].values.tolist()
+def main():
+    date = getDate()
+    getClose(date)
+    showRSI()
 
-movement = []
 
-i = 1
-while i < len(closes):
-    movement.append(closes[i]/closes[i-1])
-    i += 1
+def getDate():
+    date = datetime.now()
+    date = str(date).split(" ")[0]
+    return date
 
-SMA = data.loc[:, "Close"].rolling(20).mean()
 
-avgGain = 0
-avgLoss = 0
+def getClose(date):
+    for stock in stocks:
+        movement = []
+        data = pdr.get_data_yahoo(
+            stock, start="2021-03-24", end=date)
+        closes = data.loc[:, "Close"].values.tolist()
+        for i in range(len(closes)):
+            if i > 0:
+                movement.append(closes[i]/closes[i-1])
+        rsi = rsiCal(movement)
+        stocks[stock] = rsi
 
-window_size = 14
-window = []
-RSI = []
-avgGainList = []
-avgLossList = []
-smoothRSI = []
 
-for i in range(len(movement) - window_size + 1):
-    if i >= window_size:
+def rsiCal(movement):
+    i = 0
+    avgGain = 0
+    avgLoss = 0
+    window_size = 14
+    window = []
+    RSI = []
+    avgGainList = []
+    avgLossList = []
+
+    for mov in movement:
         window = movement[i - window_size: i]
+<<<<<<< Updated upstream
         for mov in window:
             if mov > 1:
                 avgGain += mov-1
@@ -55,14 +71,38 @@ if RSI[-1] < 30:
     print("Time to buy!")
     print(RSI[-1])
 
+=======
+        if i >= window_size:
+            for mov in window:
+                if mov > 1:
+                    avgGain += mov-1
+                elif mov <= 1:
+                    avgLoss -= mov-1
+            avgGain = avgGain / window_size
+            avgLoss = avgLoss / window_size
+            avgGainList.append(avgGain)
+            avgLossList.append(avgLoss)
+            rsifunction = 100 - (100 / (1 + (avgGain/avgLoss)))
+            RSI.append(rsifunction)
+        i += 1
+    return RSI
 
-# for i in range(len(RSI) - window_size + 1):
-#     window = RSI[i + 1: i + window_size]
-#     smoothRSI.append(
-#         100 - (100 / (1 + ((avgGainList[i-1]*13+avgGainList[i])/(avgLossList[i-1]*13+avgLossList[i])))))
-# avgGain = avgGain/14
-# avgLoss = avgGain/14
 
+def showRSI():
+    i = 0
+    fig, axs = plt.subplots(19)
+    fig.suptitle('Vertically stacked subplots')
+    for stock in stocks:
+        axs[i].plot(stocks[stock])
+        i += 1
+    plt.show()
+
+
+main()
+>>>>>>> Stashed changes
+
+
+<<<<<<< Updated upstream
 print(SMA)
 fig, axs = plt.subplots(3)
 fig.suptitle('INDU-C')
@@ -84,6 +124,9 @@ plt.show()
 
 
 """"
+=======
+"""
+>>>>>>> Stashed changes
 msft = yf.Ticker("MSFT")
 
 # get stock info
