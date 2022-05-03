@@ -6,7 +6,8 @@ import discord
 import ctx
 import os
 
-from data import RSI
+from data import stock
+from Stonks import stocks
 
 client = discord.Client()
 
@@ -26,13 +27,12 @@ async def on_message(message):
         await message.channel.send(file=discord.File('insert path'))
 
 @tasks.loop(hours = 1.0)
-async def auto_send(statement):
-    statement.channel = await client.fetch.channel('509390855703101452')
-    if RSI == [14]: 
-        statement.channel.send('RSI under 14')
+def alert(alerted):
+        if stocks[stock][-1] > 70:
+            alerted.channel.send('Sell ' + stock + ', RSI:', int(stocks[stock][-1]))
+        
+        if stocks[stock][-1] < 30:
+            alerted.channel.send('Buy ' + stock + ', RSI:', int(stocks[stock][-1]))
 
-    elif RSI == [30]:
-        statement.channel.send('RSI over 30')
 
-
-client.run('OTU2NTk0MjA5NjY0NjkyMjY0.YjyfyA.RVHggdRh3oYtydZDdLsYGjrtMWI')
+client.run('OTU2NTk0MjA5NjY0NjkyMjY0.YjyfyA.gbI46Rx2rtrq9s9vtD5jBSAGw-Y')
