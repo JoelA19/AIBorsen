@@ -28,4 +28,5 @@ async def on_message(message):
             elif stocks[stock][-1] < 30:
                 await message.channel.send('Buy ' + stock + ', RSI: ' + str(int(stocks[stock][-1])))
                 await message.channel.send(file=discord.File("pictures/" + stock + ".png"))
-client.run('OTU2NTk0MjA5NjY0NjkyMjY0.YjyfyA._tzOD9ocDpavotblhupjoHrULBo')
+
+client.run('Insert Discord Token here')
