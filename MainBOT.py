@@ -1,13 +1,13 @@
 from asyncio import tasks
 from enum import auto
+from discord import File
 from discord.ext import tasks, commands
 from tracemalloc import start
+from data import stocks
 import discord
 import ctx
 import os
 
-from data import stock
-from Stonks import stocks
 
 client = discord.Client()
 
@@ -19,20 +19,13 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
+    if message.content.startswith('$stocks'):
+        for stock in stocks:
+            if stocks[stock][-1] > 70:
+                await message.channel.send('Sell ' + stock + ', RSI: ' + str(int(stocks[stock][-1])))
+                await message.channel.send(file=discord.File("pictures/" + stock + ".png"))
 
-    if message.content.startswith('$test'):
-        await message.channel.send('Bot is functioning')
-
-    elif message.content.startswith('$chart'):
-        await message.channel.send(file=discord.File('insert path'))
-
-@tasks.loop(hours = 1.0)
-def alert(alerted):
-        if stocks[stock][-1] > 70:
-            alerted.channel.send('Sell ' + stock + ', RSI:', int(stocks[stock][-1]))
-        
-        if stocks[stock][-1] < 30:
-            alerted.channel.send('Buy ' + stock + ', RSI:', int(stocks[stock][-1]))
-
-
-client.run('OTU2NTk0MjA5NjY0NjkyMjY0.YjyfyA.gbI46Rx2rtrq9s9vtD5jBSAGw-Y')
+            elif stocks[stock][-1] < 30:
+                await message.channel.send('Buy ' + stock + ', RSI: ' + str(int(stocks[stock][-1])))
+                await message.channel.send(file=discord.File("pictures/" + stock + ".png"))
+client.run('OTU2NTk0MjA5NjY0NjkyMjY0.YjyfyA._tzOD9ocDpavotblhupjoHrULBo')
