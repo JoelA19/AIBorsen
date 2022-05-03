@@ -1,14 +1,10 @@
-from lib2to3.pgen2 import grammar
-from msilib import sequence
 import yfinance as yf
 from pandas_datareader import data as pdr
-import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
 
 yf.pdr_override()
 
-# download dataframe
 stocks = {"MIPS.st": [], "EQT.st": [], "STOR-B.st": [], "ANOD-B.st": [], "ALIF-B.st": [], "THULE.st": [], "HEXA-B.st": [], "LAGR-B.st": [], "INDT.st": [],
           "EMBRAC-B.st": [], "SBB-B.st": [], "ADDT-B.st": [], "AAK.st": [], "BEIJ-B.st": [], "POOL": [], "LIFCO-B.st": [], "APG": [], "INSTAL.st": [], "XPEL": []}
 
@@ -17,7 +13,6 @@ def main():
     date = getDate()
     getClose(date)
     showRSI()
-    alert()
 
 
 def getDate():
@@ -70,16 +65,23 @@ def rsiCal(movement):
 def showRSI():
     for stock in stocks:
         plt.plot(stocks[stock])
+        x = [1, len(stocks[stock])]
+        y = [30, 30]
+        plt.plot(x, y)
+        x = [1, len(stocks[stock])]
+        y = [70, 70]
+        plt.plot(x, y)
+        plt.title(stock)
         plt.savefig("pictures/"+stock+".png")
         plt.clf()
 
 
-def alert():
-    for stock in stocks:
-        if stocks[stock][-1] > 70:
-            print('Sell ' + stock + ', RSI:', int(stocks[stock][-1]))
-        if stocks[stock][-1] < 30:
-            print('Buy ' + stock + ', RSI:', int(stocks[stock][-1]))
+# def alert():
+#     for stock in stocks:
+#         if stocks[stock][-1] > 70:
+#             print('Sell ' + stock + ', RSI:', int(stocks[stock][-1]))
+#         if stocks[stock][-1] < 30:
+#             print('Buy ' + stock + ', RSI:', int(stocks[stock][-1]))
 
 
 main()
