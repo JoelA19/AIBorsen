@@ -10,8 +10,8 @@ import os
 
 bot = commands.Bot("!")
 
-target_channel_id = 971755150400167957
-
+target_channel_id = ('Text channel ID')
+#Höger klicka på text kanal sedan copy channel ID
 
 @tasks.loop(hours=12)
 async def called_once_a_day():
@@ -20,10 +20,8 @@ async def called_once_a_day():
     for stock in stocks:
         if stocks[stock][-1] > 70:
             embed = discord.Embed(
-                title=stock,
-                description=('Sell ' + stock + ', RSI: ' +
-                             str(int(stocks[stock][-1]))),
-                colour=discord.Colour.purple()
+            title=stock, description=('Sell ' + stock + ', RSI: ' + str(int(stocks[stock][-1]))),
+            colour=discord.Colour.purple()
             )
             await message_channel.send(embed=embed, file=discord.File("pictures/" + stock + ".png"))
 
@@ -43,4 +41,5 @@ async def before():
     print("Finished waiting")
 
 called_once_a_day.start()
-bot.run("OTU2NTk0MjA5NjY0NjkyMjY0.YjyfyA.a5HGowJKVRZ5tWn_1-9BNsITDRM")
+bot.run("Discord Bot Token")
+#använd https://discord.com/developers/applications/ för att skapa en bot för att sedan gå undder bot och hämta token genom reset token
