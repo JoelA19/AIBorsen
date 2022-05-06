@@ -8,25 +8,39 @@ import discord
 import ctx
 import os
 
+bot = commands.Bot("!")
 
-client = discord.Client()
+target_channel_id = 971755150400167957
 
-@client.event
-async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    if message.content.startswith('$stocks'):
-        for stock in stocks:
-            if stocks[stock][-1] > 70:
-                await message.channel.send('Sell ' + stock + ', RSI: ' + str(int(stocks[stock][-1])))
-                await message.channel.send(file=discord.File("pictures/" + stock + ".png"))
+@tasks.loop(hours=12)
+async def called_once_a_day():
+    message_channel = bot.get_channel(target_channel_id)
+    print(f"Got channel {message_channel}")
+    for stock in stocks:
+        if stocks[stock][-1] > 70:
+            embed = discord.Embed(
+                title=stock,
+                description=('Sell ' + stock + ', RSI: ' +
+                             str(int(stocks[stock][-1]))),
+                colour=discord.Colour.purple()
+            )
+            await message_channel.send(embed=embed, file=discord.File("pictures/" + stock + ".png"))
 
-            elif stocks[stock][-1] < 30:
-                await message.channel.send('Buy ' + stock + ', RSI: ' + str(int(stocks[stock][-1])))
-                await message.channel.send(file=discord.File("pictures/" + stock + ".png"))
+        elif stocks[stock][-1] < 30:
+            embed = discord.Embed(
+                title=stock,
+                description=('Buy ' + stock + ', RSI: ' +
+                             str(int(stocks[stock][-1]))),
+                colour=discord.Colour.purple()
+            )
+            await message_channel.send(embed=embed, file=discord.File("pictures/" + stock + ".png"))
 
-client.run('Insert Discord Token here')
+
+@called_once_a_day.before_loop
+async def before():
+    await bot.wait_until_ready()
+    print("Finished waiting")
+
+called_once_a_day.start()
+bot.run("OTU2NTk0MjA5NjY0NjkyMjY0.YjyfyA.a5HGowJKVRZ5tWn_1-9BNsITDRM")
